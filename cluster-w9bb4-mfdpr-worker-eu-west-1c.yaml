@@ -1,0 +1,80 @@
+apiVersion: machine.openshift.io/v1beta1
+kind: MachineSet
+metadata:
+  annotations:
+    machine.openshift.io/GPU: "0"
+    machine.openshift.io/memoryMb: "32768"
+    machine.openshift.io/vCPU: "8"
+  labels:
+    machine.openshift.io/cluster-api-cluster: cluster-w9bb4-mfdpr
+  name: cluster-w9bb4-mfdpr-worker-eu-west-1c
+  namespace: openshift-machine-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      machine.openshift.io/cluster-api-cluster: cluster-w9bb4-mfdpr
+      machine.openshift.io/cluster-api-machineset: cluster-w9bb4-mfdpr-worker-eu-west-1c
+  template:
+    metadata:
+      labels:
+        machine.openshift.io/cluster-api-cluster: cluster-w9bb4-mfdpr
+        machine.openshift.io/cluster-api-machine-role: worker
+        machine.openshift.io/cluster-api-machine-type: worker
+        machine.openshift.io/cluster-api-machineset: cluster-w9bb4-mfdpr-worker-eu-west-1c
+    spec:
+      lifecycleHooks: {}
+      metadata: {}
+      providerSpec:
+        value:
+          ami:
+            id: ami-00df54d73dc285b15
+          apiVersion: machine.openshift.io/v1beta1
+          blockDevices:
+          - ebs:
+              encrypted: true
+              iops: 0
+              kmsKey:
+                arn: ""
+              volumeSize: 100
+              volumeType: gp2
+          credentialsSecret:
+            name: aws-cloud-credentials
+          deviceIndex: 0
+          iamInstanceProfile:
+            id: cluster-w9bb4-mfdpr-worker-profile
+          instanceType: m5.2xlarge
+          kind: AWSMachineProviderConfig
+          metadata:
+            creationTimestamp: null
+          metadataServiceOptions: {}
+          placement:
+            availabilityZone: eu-west-1c
+            region: eu-west-1
+          securityGroups:
+          - filters:
+            - name: tag:Name
+              values:
+              - cluster-w9bb4-mfdpr-worker-sg
+          subnet:
+            filters:
+            - name: tag:Name
+              values:
+              - cluster-w9bb4-mfdpr-private-eu-west-1c
+          tags:
+          - name: kubernetes.io/cluster/cluster-w9bb4-mfdpr
+            value: owned
+          - name: Stack
+            value: project ocp4-cluster-w9bb4
+          - name: env_type
+            value: ocp4-cluster
+          - name: guid
+            value: w9bb4
+          - name: owner
+            value: unknown
+          - name: platform
+            value: RHPDS
+          - name: uuid
+            value: 590e1bf1-e3ed-543c-88aa-6d8ed3d5f4e9
+          userDataSecret:
+            name: worker-user-data
