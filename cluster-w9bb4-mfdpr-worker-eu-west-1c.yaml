@@ -10,7 +10,6 @@ metadata:
   name: cluster-w9bb4-mfdpr-worker-eu-west-1c
   namespace: openshift-machine-api
 spec:
-  replicas: 3
   selector:
     matchLabels:
       machine.openshift.io/cluster-api-cluster: cluster-w9bb4-mfdpr
